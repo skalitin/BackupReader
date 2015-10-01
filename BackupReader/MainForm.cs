@@ -146,7 +146,7 @@ namespace BackupReader
         void mFile_OnProgressChange(int Progress)
         {
             tsStatus.Text = "Reading backup file. %" + Progress.ToString() + " completed.";
-            System.Windows.Forms.Application.DoEvents();
+            Application.DoEvents();
         }
 
         private void cancelToolStripButton_Click(object sender, EventArgs e)
@@ -164,6 +164,8 @@ namespace BackupReader
             // Get the selected catalog node from tree node tag
             CCatalogNode node = (CCatalogNode)tvDirs.SelectedNode.Tag;
             if (node == null) return;
+
+            detailsTextBox1.Text = node.ToString();
             if ((node.Type == ENodeType.Root) || (node.Type == ENodeType.Set)) return;
 
             extractToolStripButton.Enabled = true;

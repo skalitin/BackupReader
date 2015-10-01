@@ -1,4 +1,6 @@
 
+using System;
+
 namespace BackupReader
 {
 
@@ -346,6 +348,7 @@ namespace BackupReader
         }
     }
 
+    [Flags]
     enum EDIRBAttributes : uint 
     {
         DIRB_READ_ONLY_BIT = 0x100,        // This bit is set if the directory is marked as read only. BIT8
@@ -384,6 +387,7 @@ namespace BackupReader
         }
     }
 
+    [Flags]
     enum EFileAttributes : uint 
     {
         FILE_READ_ONLY_BIT = 0x100,        // This bit is set if the file is marked as read only. BIT8

@@ -67,7 +67,7 @@
   <ItemGroup>
     <Compile Include="CBackupReader.cs" />
     <Compile Include="CBackupStream.cs" />
-    <Compile Include="CCatalog.cs" />
+    <Compile Include="CCatalogNode.cs" />
     <Compile Include="CDataStream.cs" />
     <Compile Include="CDescriptorBlock.cs" />
     <Compile Include="COSSpecificData.cs" />

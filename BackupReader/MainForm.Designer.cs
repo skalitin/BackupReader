@@ -46,6 +46,7 @@ namespace BackupReader
             this.fbdBackup = new System.Windows.Forms.FolderBrowserDialog();
             this.ofdCatalog = new System.Windows.Forms.OpenFileDialog();
             this.sfdCatalog = new System.Windows.Forms.SaveFileDialog();
+            this.detailsTextBox1 = new System.Windows.Forms.TextBox();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -68,12 +69,13 @@ namespace BackupReader
             // 
             // toolStripContainer1.ContentPanel
             // 
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.detailsTextBox1);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.tvDirs);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(527, 461);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(698, 421);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(527, 508);
+            this.toolStripContainer1.Size = new System.Drawing.Size(748, 516);
             this.toolStripContainer1.TabIndex = 0;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -86,9 +88,9 @@ namespace BackupReader
             this.statusStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 0);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 25);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(527, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(748, 22);
             this.statusStrip1.TabIndex = 0;
             // 
             // tsStatus
@@ -105,7 +107,7 @@ namespace BackupReader
             this.tvDirs.Location = new System.Drawing.Point(0, 0);
             this.tvDirs.Name = "tvDirs";
             this.tvDirs.SelectedImageIndex = 0;
-            this.tvDirs.Size = new System.Drawing.Size(527, 461);
+            this.tvDirs.Size = new System.Drawing.Size(698, 421);
             this.tvDirs.TabIndex = 1;
             this.tvDirs.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvDirs_AfterSelect);
             this.tvDirs.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvDirs_NodeMouseDoubleClick);
@@ -123,7 +125,6 @@ namespace BackupReader
             // toolStrip1
             // 
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripButton,
             this.extractToolStripButton,
@@ -131,9 +132,10 @@ namespace BackupReader
             this.toolStripButton1,
             this.opencatalogToolStripButton,
             this.savecatalogToolStripButton});
+            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(527, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(748, 23);
             this.toolStrip1.Stretch = true;
             this.toolStrip1.TabIndex = 0;
             // 
@@ -142,7 +144,7 @@ namespace BackupReader
             this.openToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripButton.Image")));
             this.openToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.openToolStripButton.Name = "openToolStripButton";
-            this.openToolStripButton.Size = new System.Drawing.Size(125, 22);
+            this.openToolStripButton.Size = new System.Drawing.Size(125, 20);
             this.openToolStripButton.Text = "&Read Backup File...";
             this.openToolStripButton.Click += new System.EventHandler(this.openToolStripButton_Click);
             // 
@@ -152,7 +154,7 @@ namespace BackupReader
             this.extractToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("extractToolStripButton.Image")));
             this.extractToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.extractToolStripButton.Name = "extractToolStripButton";
-            this.extractToolStripButton.Size = new System.Drawing.Size(88, 22);
+            this.extractToolStripButton.Size = new System.Drawing.Size(88, 20);
             this.extractToolStripButton.Text = "&Extract To...";
             this.extractToolStripButton.Click += new System.EventHandler(this.extractToolStripButton_Click);
             // 
@@ -162,14 +164,14 @@ namespace BackupReader
             this.cancelToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("cancelToolStripButton.Image")));
             this.cancelToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.cancelToolStripButton.Name = "cancelToolStripButton";
-            this.cancelToolStripButton.Size = new System.Drawing.Size(72, 22);
+            this.cancelToolStripButton.Size = new System.Drawing.Size(72, 20);
             this.cancelToolStripButton.Text = "&Cancel...";
             this.cancelToolStripButton.Click += new System.EventHandler(this.cancelToolStripButton_Click);
             // 
             // toolStripButton1
             // 
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripButton1.Size = new System.Drawing.Size(6, 23);
             // 
             // opencatalogToolStripButton
             // 
@@ -177,7 +179,7 @@ namespace BackupReader
             this.opencatalogToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("opencatalogToolStripButton.Image")));
             this.opencatalogToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.opencatalogToolStripButton.Name = "opencatalogToolStripButton";
-            this.opencatalogToolStripButton.Size = new System.Drawing.Size(93, 22);
+            this.opencatalogToolStripButton.Size = new System.Drawing.Size(93, 19);
             this.opencatalogToolStripButton.Text = "Open Catalog...";
             this.opencatalogToolStripButton.Click += new System.EventHandler(this.opencatalogToolStripButton_Click);
             // 
@@ -188,7 +190,7 @@ namespace BackupReader
             this.savecatalogToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("savecatalogToolStripButton.Image")));
             this.savecatalogToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.savecatalogToolStripButton.Name = "savecatalogToolStripButton";
-            this.savecatalogToolStripButton.Size = new System.Drawing.Size(88, 22);
+            this.savecatalogToolStripButton.Size = new System.Drawing.Size(88, 19);
             this.savecatalogToolStripButton.Text = "Save Catalog...";
             this.savecatalogToolStripButton.Click += new System.EventHandler(this.savecatalogToolStripButton_Click);
             // 
@@ -203,11 +205,19 @@ namespace BackupReader
             this.sfdCatalog.DefaultExt = "cat";
             this.sfdCatalog.Filter = "Catalog Files (*.cat)|*.cat|All Files|*.*";
             // 
+            // detailsTextBox1
+            // 
+            this.detailsTextBox1.Location = new System.Drawing.Point(183, 347);
+            this.detailsTextBox1.Multiline = true;
+            this.detailsTextBox1.Name = "detailsTextBox1";
+            this.detailsTextBox1.Size = new System.Drawing.Size(342, 109);
+            this.detailsTextBox1.TabIndex = 2;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(527, 508);
+            this.ClientSize = new System.Drawing.Size(748, 516);
             this.Controls.Add(this.toolStripContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
@@ -216,6 +226,7 @@ namespace BackupReader
             this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);
             this.toolStripContainer1.BottomToolStripPanel.PerformLayout();
             this.toolStripContainer1.ContentPanel.ResumeLayout(false);
+            this.toolStripContainer1.ContentPanel.PerformLayout();
             this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
             this.toolStripContainer1.TopToolStripPanel.PerformLayout();
             this.toolStripContainer1.ResumeLayout(false);
@@ -246,6 +257,7 @@ namespace BackupReader
         private System.Windows.Forms.ToolStripButton savecatalogToolStripButton;
         private System.Windows.Forms.OpenFileDialog ofdCatalog;
         private System.Windows.Forms.SaveFileDialog sfdCatalog;
+        private System.Windows.Forms.TextBox detailsTextBox1;
     }
 }
 

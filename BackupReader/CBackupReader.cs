@@ -41,104 +41,110 @@ namespace BackupReader
             mCancel = false;
 
             // Read the media header
-            CTapeHeaderDescriptorBlock tape = (CTapeHeaderDescriptorBlock)mStream.ReadDBLK();
+            CTapeHeaderDescriptorBlock tapeHeaderDescriptorBlock = (CTapeHeaderDescriptorBlock)mStream.ReadDBLK();
+            
             // Read soft file mark
-            CSoftFilemarkDescriptorBlock file = (CSoftFilemarkDescriptorBlock)mStream.ReadDBLK();
+            CSoftFilemarkDescriptorBlock filemarkDescriptorBlock = (CSoftFilemarkDescriptorBlock)mStream.ReadDBLK();
 
             // Create the root catalog node
-            CCatalogNode node = new CCatalogNode(tape.MediaName, ENodeType.Root, 0);
-            CCatalogNode nLastSet = null;
-            CCatalogNode nLastVolume = null;
-            CCatalogNode nLastDir = null;
+            CCatalogNode node = new CCatalogNode(tapeHeaderDescriptorBlock, tapeHeaderDescriptorBlock.MediaName, ENodeType.Root);
+            CCatalogNode lastSetNode = null;
+            CCatalogNode lastVolumeNode = null;
+            CCatalogNode lastFolderNode = null;
 
             // Get next block type
-            EBlockType bt = mStream.PeekNextBlockType();
-            while ((bt != EBlockType.MTF_EOTM) && (bt != 0) && (mCancel == false))
+            var blockType = mStream.PeekNextBlockType();
+            while ((blockType != EBlockType.MTF_EOTM) && (blockType != 0) && (mCancel == false))
             {
                 // Read next block
-                CDescriptorBlock block = mStream.ReadDBLK();
+                var block = mStream.ReadDBLK();
 
                 // Add to catalog
-                if (bt == EBlockType.MTF_SSET)
+                if (blockType == EBlockType.MTF_SSET)
                 {
-                    CStartOfDataSetDescriptorBlock sset = (CStartOfDataSetDescriptorBlock)block;
-                    CCatalogNode cnode = node.AddSet("Set: " + sset.DataSetNumber + " - " + sset.DataSetName, block.StartPosition);
-                    nLastSet = cnode;
+                    var dataSetDescriptorBlock = (CStartOfDataSetDescriptorBlock)block;
+                    var cnode = node.AddSet(dataSetDescriptorBlock);
+                    lastSetNode = cnode;
                 }
-                else if (bt == EBlockType.MTF_VOLB)
+                else if (blockType == EBlockType.MTF_VOLB)
                 {
-                    CVolumeDescriptorBlock vol = (CVolumeDescriptorBlock)block;
-                    CCatalogNode cnode = nLastSet.AddVolume(vol.DeviceName, block.StartPosition);
-                    nLastVolume = cnode;
+                    var volumeDescriptorBlock = (CVolumeDescriptorBlock)block;
+                    var cnode = lastSetNode.AddVolume(volumeDescriptorBlock);
+                    lastVolumeNode = cnode;
                 }
-                else if (bt == EBlockType.MTF_DIRB)
+                else if (blockType == EBlockType.MTF_DIRB)
                 {
-                    CDirectoryDescriptorBlock dir = (CDirectoryDescriptorBlock)block;
+                    var directoryDescriptorBlock = (CDirectoryDescriptorBlock)block;
                     // Check if the directory name is contained in a data stream
                     CCatalogNode cnode = null;
-                    if ((dir.DIRBAttributes & EDIRBAttributes.DIRB_PATH_IN_STREAM_BIT) != 0)
+                    if ((directoryDescriptorBlock.DIRBAttributes & EDIRBAttributes.DIRB_PATH_IN_STREAM_BIT) != 0)
                     {
-                        foreach (CDataStream data in dir.Streams)
+                        foreach (CDataStream data in directoryDescriptorBlock.Streams)
                         {
                             if (data.Header.StreamID == "PNAM")
                             {
-                                if (dir.StringType == EStringType.ANSI)
+                                if (directoryDescriptorBlock.StringType == EStringType.ANSI)
                                 {
                                     System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-                                    string str = encoding.GetString(data.Data);
-                                    str = str.Substring(0, str.Length - 1);
-                                    cnode = nLastVolume.AddFolder(str, block.StartPosition);
+                                    var folderName = encoding.GetString(data.Data);
+                                    folderName = folderName.Substring(0, folderName.Length - 1);
+                                    cnode = lastVolumeNode.AddFolder(directoryDescriptorBlock, folderName);
                                 }
-                                else if (dir.StringType == EStringType.Unicode)
+                                else if (directoryDescriptorBlock.StringType == EStringType.Unicode)
                                 {
                                     System.Text.UnicodeEncoding encoding = new System.Text.UnicodeEncoding();
-                                    string str = encoding.GetString(data.Data);
-                                    str = str.Substring(0, str.Length - 1);
-                                    cnode = nLastVolume.AddFolder(str, block.StartPosition);
+                                    var folderName = encoding.GetString(data.Data);
+                                    folderName = folderName.Substring(0, folderName.Length - 1);
+                                    cnode = lastVolumeNode.AddFolder(directoryDescriptorBlock, folderName);
                                 }
 
                             }
                         }
                     }
                     else
-                        cnode = nLastVolume.AddFolder(dir.DirectoryName.Substring(0, dir.DirectoryName.Length - 1), block.StartPosition);
+                    {
+                        var folderName = directoryDescriptorBlock.DirectoryName.Substring(0, directoryDescriptorBlock.DirectoryName.Length - 1);
+                        cnode = lastVolumeNode.AddFolder(directoryDescriptorBlock, folderName);
+                    }
 
-                    if (cnode != null) nLastDir = cnode;
+                    if (cnode != null) lastFolderNode = cnode;
                 }
-                else if (bt == EBlockType.MTF_FILE)
+                else if (blockType == EBlockType.MTF_FILE)
                 {
-                    CFileDescriptorBlock fil = (CFileDescriptorBlock)block;
+                    var fileDescriptorBlock = (CFileDescriptorBlock)block;
                     // Check if the file name is contained in a data stream
                     CCatalogNode cnode = null;
-                    if ((fil.FileAttributes & EFileAttributes.FILE_NAME_IN_STREAM_BIT) != 0)
+                    if ((fileDescriptorBlock.FileAttributes & EFileAttributes.FILE_NAME_IN_STREAM_BIT) != 0)
                     {
-                        foreach (CDataStream data in fil.Streams)
+                        foreach (CDataStream data in fileDescriptorBlock.Streams)
                         {
                             if (data.Header.StreamID == "FNAM")
                             {
-                                if (fil.StringType == EStringType.ANSI)
+                                if (fileDescriptorBlock.StringType == EStringType.ANSI)
                                 {
                                     System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-                                    string str = encoding.GetString(data.Data);
-                                    cnode = nLastDir.AddFile(str, block.StartPosition);
+                                    var fileName = encoding.GetString(data.Data);
+                                    lastFolderNode.AddFile(fileDescriptorBlock, fileName);
                                 }
-                                else if (fil.StringType == EStringType.Unicode)
+                                else if (fileDescriptorBlock.StringType == EStringType.Unicode)
                                 {
                                     System.Text.UnicodeEncoding encoding = new System.Text.UnicodeEncoding();
-                                    string str = encoding.GetString(data.Data);
-                                    cnode = nLastDir.AddFile(str, block.StartPosition);
+                                    var fileName = encoding.GetString(data.Data);
+                                    lastFolderNode.AddFile(fileDescriptorBlock, fileName);
                                 }
 
                             }
                         }
                     }
                     else
-                        cnode = nLastDir.AddFile(fil.FileName, block.StartPosition);
+                    {
+                        lastFolderNode.AddFile(fileDescriptorBlock, fileDescriptorBlock.FileName);
+                    }
                 }
 
 
                 // Get next block type
-                bt = mStream.PeekNextBlockType();
+                blockType = mStream.PeekNextBlockType();
 
                 // Check progress
                 if (mStream.BaseStream.Position > mLastPos + mIncrement)
@@ -162,9 +168,9 @@ namespace BackupReader
         /// <summary>
         /// Opens a backup file.
         /// </summary>
-        public void Open(string Filename)
+        public void Open(string filename)
         {
-            mStream = new CBackupStream(Filename);
+            mStream = new CBackupStream(filename);
             mIncrement = mStream.BaseStream.Length / 100;
             mLastPos = 0;
             mCancel = false;
@@ -180,12 +186,11 @@ namespace BackupReader
 
         public CBackupReader()
         {
-
         }
 
-        public CBackupReader(string Filename)
+        public CBackupReader(string filename)
         {
-            Open(Filename);
+            Open(filename);
         }
 
         ~CBackupReader()

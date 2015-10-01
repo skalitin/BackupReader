@@ -20,6 +20,12 @@ namespace BackupReader
         private long mOffset;
         private CCatalogNode mParent;
         private System.Collections.Generic.List<CCatalogNode> mNodes;
+        private CDescriptorBlock mDescriptorBlock;
+
+        public CDescriptorBlock DescriptorBlock
+        {
+            get { return mDescriptorBlock; }
+        }
 
         public string Name
         {
@@ -48,6 +54,7 @@ namespace BackupReader
 
         public CCatalogNode()
         {
+            mDescriptorBlock = null;
             mName = "";
             mType = ENodeType.Root;
             mOffset = 0;
@@ -55,52 +62,54 @@ namespace BackupReader
             mNodes = new System.Collections.Generic.List<CCatalogNode>();
         }
 
-        public CCatalogNode(string nName, ENodeType nType, long nOffset)
+        public CCatalogNode(CDescriptorBlock descriptorBlock, string nName, ENodeType nType)
         {
+            mDescriptorBlock = descriptorBlock;
             mName = nName;
             mType = nType;
-            mOffset = nOffset;
+            mOffset = descriptorBlock.StartPosition;
             mParent = null;
             mNodes = new System.Collections.Generic.List<CCatalogNode>();
         }
 
-        public CCatalogNode AddSet(string nName, long nOffset)
+        public CCatalogNode AddSet(CStartOfDataSetDescriptorBlock descriptorBlock)
         {
-            CCatalogNode cnode = new CCatalogNode(nName, ENodeType.Set, nOffset);
+            var name = "Set: " + descriptorBlock.DataSetNumber + " - " + descriptorBlock.DataSetName;
+            var cnode = new CCatalogNode(descriptorBlock, name, ENodeType.Set);
             cnode.mParent = this;
             mNodes.Add(cnode);
             return cnode;
         }
 
-        public CCatalogNode AddVolume(string nName, long nOffset)
+        public CCatalogNode AddVolume(CVolumeDescriptorBlock descriptorBlock)
         {
-            CCatalogNode cnode = new CCatalogNode(nName, ENodeType.Volume, nOffset);
+            var cnode = new CCatalogNode(descriptorBlock, descriptorBlock.DeviceName, ENodeType.Volume);
             cnode.mParent = this;
             mNodes.Add(cnode);
             return cnode;
         }
 
-        public CCatalogNode AddFolder(string nName, long nOffset)
+        public CCatalogNode AddFolder(CDirectoryDescriptorBlock descriptorBlock, string nName)
         {
-            CCatalogNode cnode = new CCatalogNode(nName, ENodeType.Folder, nOffset);
+            var cnode = new CCatalogNode(descriptorBlock, nName, ENodeType.Folder);
             cnode.mParent = this;
             mNodes.Add(cnode);
             return cnode;
         }
 
-        public CCatalogNode AddFile(string nName, long nOffset)
+        public CCatalogNode AddFile(CFileDescriptorBlock descriptorBlock, string nName)
         {
-            CCatalogNode cnode = new CCatalogNode(nName, ENodeType.File, nOffset);
+            var cnode = new CCatalogNode(descriptorBlock, nName, ENodeType.File);
             cnode.mParent = this;
             mNodes.Add(cnode);
             return cnode;
         }
 
-        public bool ExtractTo(CBackupReader BackupFile, string TargetPath)
+        public bool ExtractTo(CBackupReader backupFile, string targetPath)
         {
             // Ensure that the target path has a trailing '\'
-            if (TargetPath[TargetPath.Length - 1] != '\\')
-                TargetPath += '\\';
+            if (targetPath[targetPath.Length - 1] != '\\')
+                targetPath += '\\';
 
             if ((mType == ENodeType.Root) || (mType == ENodeType.Set))
             {
@@ -108,23 +117,23 @@ namespace BackupReader
             }
             else if (mType == ENodeType.Volume)
             {
-                System.IO.DirectoryInfo dirinfo = System.IO.Directory.CreateDirectory(TargetPath);
+                System.IO.DirectoryInfo dirinfo = System.IO.Directory.CreateDirectory(targetPath);
                 foreach (CCatalogNode node in mNodes)
-                    node.ExtractTo(BackupFile, TargetPath);
+                    node.ExtractTo(backupFile, targetPath);
             }
             else if (mType == ENodeType.Folder)
             {
-                System.IO.DirectoryInfo dirinfo = System.IO.Directory.CreateDirectory(TargetPath + mName);
+                System.IO.DirectoryInfo dirinfo = System.IO.Directory.CreateDirectory(targetPath + mName);
                 foreach (CCatalogNode node in mNodes)
-                    node.ExtractTo(BackupFile, dirinfo.FullName);
+                    node.ExtractTo(backupFile, dirinfo.FullName);
             }
             else if (mType == ENodeType.File)
             {
                 // Create the target directory if it does not exist
-                System.IO.Directory.CreateDirectory(TargetPath);
-                BackupFile.Stream.BaseStream.Seek(mOffset, System.IO.SeekOrigin.Begin);
-                System.IO.FileStream file = new System.IO.FileStream(TargetPath + mName, System.IO.FileMode.Create);
-                CFileDescriptorBlock fil = (CFileDescriptorBlock)BackupFile.Stream.ReadDBLK();
+                System.IO.Directory.CreateDirectory(targetPath);
+                backupFile.Stream.BaseStream.Seek(mOffset, System.IO.SeekOrigin.Begin);
+                System.IO.FileStream file = new System.IO.FileStream(targetPath + mName, System.IO.FileMode.Create);
+                CFileDescriptorBlock fil = (CFileDescriptorBlock)backupFile.Stream.ReadDBLK();
                 foreach (CDataStream data in fil.Streams)
                 {
                     if (data.Header.StreamID == "STAN")
@@ -226,6 +235,10 @@ namespace BackupReader
             }
         }
 
+        public override string ToString()
+        {
+            return string.Format("Name: {0}, Type: {1}, Offset: {2}, Block: {3}", Name, Type, Offset, DescriptorBlock);
+        }
     }
 
 }
