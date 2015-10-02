@@ -207,10 +207,10 @@ namespace BackupReader
             // 
             // detailsTextBox1
             // 
-            this.detailsTextBox1.Location = new System.Drawing.Point(183, 347);
+            this.detailsTextBox1.Location = new System.Drawing.Point(179, 247);
             this.detailsTextBox1.Multiline = true;
             this.detailsTextBox1.Name = "detailsTextBox1";
-            this.detailsTextBox1.Size = new System.Drawing.Size(342, 109);
+            this.detailsTextBox1.Size = new System.Drawing.Size(338, 109);
             this.detailsTextBox1.TabIndex = 2;
             // 
             // MainForm

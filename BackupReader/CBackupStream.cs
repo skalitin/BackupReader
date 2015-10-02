@@ -10,15 +10,15 @@ namespace BackupReader
     /// </summary>
     class CBackupStream : System.IO.BinaryReader 
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Reads a descriptor block from the stream.
         /// </summary>
         public CDescriptorBlock ReadDBLK()
         {
-            // Read block type
-            EBlockType bt = PeekNextBlockType();
-
-            switch (bt)
+            var blockType = PeekNextBlockType();
+            switch (blockType)
             {
                 case EBlockType.MTF_TAPE: // TAPE descriptor block
                     return new CTapeHeaderDescriptorBlock(this);

@@ -91,6 +91,11 @@ namespace BackupReader
     /// </summary>
     class CDescriptorBlock
     {
+        public override string ToString()
+        {
+            return string.Format("StartPosition: {0}, BlockType: {1}, Attributes: {2}, OffsetToFirstEvent: {3}, Osid: {4}, OsVersion: {5}, DisplayableSize: {6}, FormatLogicalAddress: {7}, ReservedMbc: {8}, ControlBlock: {9}, OsSpecificData: {10}, StringType: {11}, HeaderChecksum: {12}, Streams: {13}", StartPosition, BlockType, Attributes, OffsetToFirstEvent, OSID, OSVersion, DisplayableSize, FormatLogicalAddress, ReservedMBC, ControlBlock, OsSpecificData, StringType, HeaderChecksum, Streams);
+        }
+
         public long StartPosition;
 
         public EBlockType BlockType;
@@ -190,6 +195,11 @@ namespace BackupReader
 
     class CTapeHeaderDescriptorBlock : CDescriptorBlock
     {
+        public override string ToString()
+        {
+            return string.Format("{0}, MediaFamilyId: {1}, TapeAttributes: {2}, MediaSequenceNumber: {3}, PasswordEncryptionAlgorithm: {4}, SoftFilemarkBlockSize: {5}, MediaBasedCatalogType: {6}, MediaName: {7}, MediaDescription: {8}, MediaPassword: {9}, SoftwareName: {10}, FormatLogicalBlockSize: {11}, SoftwareVendorId: {12}, MediaDate: {13}, MtfMajorVersion: {14}", base.ToString(), MediaFamilyID, TapeAttributes, MediaSequenceNumber, PasswordEncryptionAlgorithm, SoftFilemarkBlockSize, MediaBasedCatalogType, MediaName, MediaDescription, MediaPassword, SoftwareName, FormatLogicalBlockSize, SoftwareVendorID, MediaDate, MTFMajorVersion);
+        }
+
         public uint MediaFamilyID;
         public ETapeAttributes TapeAttributes;
         public ushort MediaSequenceNumber;
@@ -202,27 +212,27 @@ namespace BackupReader
         public string SoftwareName;
         public ushort FormatLogicalBlockSize;
         public ushort SoftwareVendorID;
-        public System.DateTime MediaDate;
+        public DateTime MediaDate;
         public byte MTFMajorVersion;
 
-        public CTapeHeaderDescriptorBlock(CBackupStream Reader)
+        public CTapeHeaderDescriptorBlock(CBackupStream backupStream)
         {
-            base.ReadData(Reader);
-            MediaFamilyID = Reader.ReadUInt32();
-            TapeAttributes = (ETapeAttributes)Reader.ReadUInt32();
-            MediaSequenceNumber = Reader.ReadUInt16();
-            PasswordEncryptionAlgorithm = Reader.ReadUInt16();
-            SoftFilemarkBlockSize = Reader.ReadUInt16();
-            MediaBasedCatalogType = (EMediaBasedCatalogType)Reader.ReadUInt16();
-            MediaName = Reader.ReadString(StartPosition, StringType);
-            MediaDescription = Reader.ReadString(StartPosition, StringType);
-            MediaPassword = Reader.ReadString(StartPosition, StringType);
-            SoftwareName = Reader.ReadString(StartPosition, StringType);
-            FormatLogicalBlockSize = Reader.ReadUInt16();
-            SoftwareVendorID = Reader.ReadUInt16();
-            MediaDate = Reader.ReadDate();
-            MTFMajorVersion = Reader.ReadByte();
-            base.ReadStreams(Reader);
+            base.ReadData(backupStream);
+            MediaFamilyID = backupStream.ReadUInt32();
+            TapeAttributes = (ETapeAttributes)backupStream.ReadUInt32();
+            MediaSequenceNumber = backupStream.ReadUInt16();
+            PasswordEncryptionAlgorithm = backupStream.ReadUInt16();
+            SoftFilemarkBlockSize = backupStream.ReadUInt16();
+            MediaBasedCatalogType = (EMediaBasedCatalogType)backupStream.ReadUInt16();
+            MediaName = backupStream.ReadString(StartPosition, StringType);
+            MediaDescription = backupStream.ReadString(StartPosition, StringType);
+            MediaPassword = backupStream.ReadString(StartPosition, StringType);
+            SoftwareName = backupStream.ReadString(StartPosition, StringType);
+            FormatLogicalBlockSize = backupStream.ReadUInt16();
+            SoftwareVendorID = backupStream.ReadUInt16();
+            MediaDate = backupStream.ReadDate();
+            MTFMajorVersion = backupStream.ReadByte();
+            base.ReadStreams(backupStream);
         }
 }
 
@@ -230,11 +240,11 @@ namespace BackupReader
     {
         public ulong LastESETPBA;
 
-        public CEndOfTapeMarkerDescriptorBlock(CBackupStream Reader)
+        public CEndOfTapeMarkerDescriptorBlock(CBackupStream backupStream)
         {
-            base.ReadData(Reader);
-            LastESETPBA = Reader.ReadUInt64();
-            base.ReadStreams(Reader);
+            base.ReadData(backupStream);
+            LastESETPBA = backupStream.ReadUInt64();
+            base.ReadStreams(backupStream);
         }
     }
 
@@ -252,6 +262,11 @@ namespace BackupReader
 
     class CStartOfDataSetDescriptorBlock : CDescriptorBlock 
     {
+        public override string ToString()
+        {
+            return string.Format("{0}, SsetAttributes: {1}, PasswordEncryptionAlgorithm: {2}, SoftwareCompressionAlgorithm: {3}, SoftwareVendorId: {4}, DataSetNumber: {5}, DataSetName: {6}, DataSetDescription: {7}, DataSetPassword: {8}, UserName: {9}, PhysicalBlockAddress: {10}, MediaWriteDate: {11}, SoftwareMajorVersion: {12}, SoftwareMinorVersion: {13}, MtfTimeZone: {14}, MtfMinorVersion: {15}, MediaCatalogVersion: {16}", base.ToString(), SSETAttributes, PasswordEncryptionAlgorithm, SoftwareCompressionAlgorithm, SoftwareVendorID, DataSetNumber, DataSetName, DataSetDescription, DataSetPassword, UserName, PhysicalBlockAddress, MediaWriteDate, SoftwareMajorVersion, SoftwareMinorVersion, MTFTimeZone, MTFMinorVersion, MediaCatalogVersion);
+        }
+
         public ESSETAttributes SSETAttributes;
         public ushort PasswordEncryptionAlgorithm;
         public ushort SoftwareCompressionAlgorithm;
@@ -269,26 +284,26 @@ namespace BackupReader
         public byte MTFMinorVersion;
         public byte MediaCatalogVersion;
 
-        public CStartOfDataSetDescriptorBlock(CBackupStream Reader)
+        public CStartOfDataSetDescriptorBlock(CBackupStream backupStream)
         {
-            base.ReadData(Reader);
-            SSETAttributes = (ESSETAttributes)Reader.ReadUInt32();
-            PasswordEncryptionAlgorithm = Reader.ReadUInt16();
-            SoftwareCompressionAlgorithm = Reader.ReadUInt16();
-            SoftwareVendorID = Reader.ReadUInt16();
-            DataSetNumber = Reader.ReadUInt16();
-            DataSetName = Reader.ReadString(StartPosition, StringType);
-            DataSetDescription = Reader.ReadString(StartPosition, StringType);
-            DataSetPassword = Reader.ReadString(StartPosition, StringType);
-            UserName = Reader.ReadString(StartPosition, StringType);
-            PhysicalBlockAddress = Reader.ReadUInt64();
-            MediaWriteDate = Reader.ReadDate();
-            SoftwareMajorVersion = Reader.ReadByte();
-            SoftwareMinorVersion = Reader.ReadByte();
-            MTFTimeZone = Reader.ReadSByte();
-            MTFMinorVersion = Reader.ReadByte();
-            MediaCatalogVersion = Reader.ReadByte();
-            base.ReadStreams(Reader);
+            base.ReadData(backupStream);
+            SSETAttributes = (ESSETAttributes)backupStream.ReadUInt32();
+            PasswordEncryptionAlgorithm = backupStream.ReadUInt16();
+            SoftwareCompressionAlgorithm = backupStream.ReadUInt16();
+            SoftwareVendorID = backupStream.ReadUInt16();
+            DataSetNumber = backupStream.ReadUInt16();
+            DataSetName = backupStream.ReadString(StartPosition, StringType);
+            DataSetDescription = backupStream.ReadString(StartPosition, StringType);
+            DataSetPassword = backupStream.ReadString(StartPosition, StringType);
+            UserName = backupStream.ReadString(StartPosition, StringType);
+            PhysicalBlockAddress = backupStream.ReadUInt64();
+            MediaWriteDate = backupStream.ReadDate();
+            SoftwareMajorVersion = backupStream.ReadByte();
+            SoftwareMinorVersion = backupStream.ReadByte();
+            MTFTimeZone = backupStream.ReadSByte();
+            MTFMinorVersion = backupStream.ReadByte();
+            MediaCatalogVersion = backupStream.ReadByte();
+            base.ReadStreams(backupStream);
         }
     }
 
@@ -302,17 +317,17 @@ namespace BackupReader
         public ushort DataSetNumber;
         public System.DateTime MediaWriteDate;
 
-        public CEndOfDataSetDescriptorBlock(CBackupStream Reader)
+        public CEndOfDataSetDescriptorBlock(CBackupStream backupStream)
         {
-            base.ReadData(Reader);
-            ESETAttributes = (ESSETAttributes)Reader.ReadUInt32();
-            NumberOfCorruptFiles = Reader.ReadUInt32();
-            ReservedforMBC1 = Reader.ReadUInt64();
-            ReservedforMBC2 = Reader.ReadUInt64();
-            FDDMediaSequenceNumber = Reader.ReadUInt16();
-            DataSetNumber = Reader.ReadUInt16();
-            MediaWriteDate = Reader.ReadDate();
-            base.ReadStreams(Reader);
+            base.ReadData(backupStream);
+            ESETAttributes = (ESSETAttributes)backupStream.ReadUInt32();
+            NumberOfCorruptFiles = backupStream.ReadUInt32();
+            ReservedforMBC1 = backupStream.ReadUInt64();
+            ReservedforMBC2 = backupStream.ReadUInt64();
+            FDDMediaSequenceNumber = backupStream.ReadUInt16();
+            DataSetNumber = backupStream.ReadUInt16();
+            MediaWriteDate = backupStream.ReadDate();
+            base.ReadStreams(backupStream);
         }
     }
 
@@ -330,21 +345,26 @@ namespace BackupReader
 
     class CVolumeDescriptorBlock : CDescriptorBlock 
     {
+        public override string ToString()
+        {
+            return string.Format("{0}, VolbAttributes: {1}, DeviceName: {2}, VolumeName: {3}, MachineName: {4}, MediaWriteDate: {5}", base.ToString(), VOLBAttributes, DeviceName, VolumeName, MachineName, MediaWriteDate);
+        }
+
         public EVOLBAttributes VOLBAttributes;
         public string DeviceName;
         public string VolumeName;
         public string MachineName;
         public System.DateTime MediaWriteDate;
 
-        public CVolumeDescriptorBlock(CBackupStream Reader)
+        public CVolumeDescriptorBlock(CBackupStream backupStream)
         {
-            base.ReadData(Reader);
-            VOLBAttributes = (EVOLBAttributes)Reader.ReadUInt32();
-            DeviceName = Reader.ReadString(StartPosition, StringType);
-            VolumeName = Reader.ReadString(StartPosition, StringType);
-            MachineName = Reader.ReadString(StartPosition, StringType);
-            MediaWriteDate = Reader.ReadDate();
-            base.ReadStreams(Reader);
+            base.ReadData(backupStream);
+            VOLBAttributes = (EVOLBAttributes)backupStream.ReadUInt32();
+            DeviceName = backupStream.ReadString(StartPosition, StringType);
+            VolumeName = backupStream.ReadString(StartPosition, StringType);
+            MachineName = backupStream.ReadString(StartPosition, StringType);
+            MediaWriteDate = backupStream.ReadDate();
+            base.ReadStreams(backupStream);
         }
     }
 
@@ -364,11 +384,16 @@ namespace BackupReader
 
     class CDirectoryDescriptorBlock : CDescriptorBlock 
     {
+        public override string ToString()
+        {
+            return string.Format("{0}, DirbAttributes: {1}, LastModificationDate: {2}, CreationDate: {3}, BackupDate: {4}, LastAccessDate: {5}, DirectoryId: {6}, DirectoryName: {7}", base.ToString(), DIRBAttributes, LastModificationDate, CreationDate, BackupDate, LastAccessDate, DirectoryID, DirectoryName);
+        }
+
         public EDIRBAttributes DIRBAttributes;
-        public System.DateTime LastModificationDate;
-        public System.DateTime CreationDate;
-        public System.DateTime BackupDate;
-        public System.DateTime LastAccessDate;
+        public DateTime LastModificationDate;
+        public DateTime CreationDate;
+        public DateTime BackupDate;
+        public DateTime LastAccessDate;
         public uint DirectoryID;
         public string DirectoryName;
 
@@ -403,6 +428,11 @@ namespace BackupReader
 
     class CFileDescriptorBlock : CDescriptorBlock 
     {
+        public override string ToString()
+        {
+            return string.Format("{0}, FileAttributes: {1}, LastModificationDate: {2}, CreationDate: {3}, BackupDate: {4}, LastAccessDate: {5}, DirectoryId: {6}, FileId: {7}, FileName: {8}", base.ToString(), FileAttributes, LastModificationDate, CreationDate, BackupDate, LastAccessDate, DirectoryID, FileID, FileName);
+        }
+
         public EFileAttributes FileAttributes;
         public System.DateTime LastModificationDate;
         public System.DateTime CreationDate;
@@ -412,18 +442,18 @@ namespace BackupReader
         public uint FileID;
         public string FileName;
 
-        public CFileDescriptorBlock(CBackupStream Reader)
+        public CFileDescriptorBlock(CBackupStream backupStream)
         {
-            base.ReadData(Reader);
-            FileAttributes = (EFileAttributes)Reader.ReadUInt32();
-            LastModificationDate = Reader.ReadDate();
-            CreationDate = Reader.ReadDate();
-            BackupDate = Reader.ReadDate();
-            LastAccessDate = Reader.ReadDate();
-            DirectoryID = Reader.ReadUInt32();
-            FileID = Reader.ReadUInt32();
-            FileName = Reader.ReadString(StartPosition, StringType);
-            base.ReadStreams(Reader);
+            base.ReadData(backupStream);
+            FileAttributes = (EFileAttributes)backupStream.ReadUInt32();
+            LastModificationDate = backupStream.ReadDate();
+            CreationDate = backupStream.ReadDate();
+            BackupDate = backupStream.ReadDate();
+            LastAccessDate = backupStream.ReadDate();
+            DirectoryID = backupStream.ReadUInt32();
+            FileID = backupStream.ReadUInt32();
+            FileName = backupStream.ReadString(StartPosition, StringType);
+            base.ReadStreams(backupStream);
         }
     }
 
@@ -443,23 +473,23 @@ namespace BackupReader
         public ulong StreamOffset;
         public ushort CorrupStreamNumber;
 
-        public CCorruptObjectDescriptorBlock(CBackupStream Reader)
+        public CCorruptObjectDescriptorBlock(CBackupStream backupStream)
         {
-            base.ReadData(Reader);
-            CFilAttributes = (ECFilAttributes)Reader.ReadUInt32();
-            Reserved = Reader.ReadUInt64();
-            StreamOffset = Reader.ReadUInt64();
-            CorrupStreamNumber = Reader.ReadUInt16();
-            base.ReadStreams(Reader);
+            base.ReadData(backupStream);
+            CFilAttributes = (ECFilAttributes)backupStream.ReadUInt32();
+            Reserved = backupStream.ReadUInt64();
+            StreamOffset = backupStream.ReadUInt64();
+            CorrupStreamNumber = backupStream.ReadUInt16();
+            base.ReadStreams(backupStream);
         }
     }
 
     class CEndOfPadSetDescriptorBlock : CDescriptorBlock 
     {
-        public CEndOfPadSetDescriptorBlock(CBackupStream Reader)
+        public CEndOfPadSetDescriptorBlock(CBackupStream backupStream)
         {
-            base.ReadData(Reader);
-            base.ReadStreams(Reader);
+            base.ReadData(backupStream);
+            base.ReadStreams(backupStream);
         }
     }
 
@@ -469,15 +499,15 @@ namespace BackupReader
         public uint FilemarkEntriesUsed;
         public uint[] PBAofPreviousFilemarksArray;
 
-        public CSoftFilemarkDescriptorBlock(CBackupStream Reader)
+        public CSoftFilemarkDescriptorBlock(CBackupStream backupStream)
         {
-            base.ReadData(Reader);
-            NumberOfFilemarkEntries = Reader.ReadUInt32();
-            FilemarkEntriesUsed = Reader.ReadUInt32();
+            base.ReadData(backupStream);
+            NumberOfFilemarkEntries = backupStream.ReadUInt32();
+            FilemarkEntriesUsed = backupStream.ReadUInt32();
             PBAofPreviousFilemarksArray = new uint[FilemarkEntriesUsed];
             for (uint i = 0; i < NumberOfFilemarkEntries; i++)
             {
-                uint val = Reader.ReadUInt32();
+                uint val = backupStream.ReadUInt32();
                 if (i < FilemarkEntriesUsed)
                     PBAofPreviousFilemarksArray.SetValue(val, i);
             }

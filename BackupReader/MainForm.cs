@@ -10,6 +10,7 @@ namespace BackupReader
 {
     public partial class MainForm : Form
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private string mFileName;
         private CBackupReader mBackupReader;
 
@@ -37,13 +38,13 @@ namespace BackupReader
                 if (mBackupReader != null) mBackupReader.Close();
                 mBackupReader = new CBackupReader(mFileName);
                 mBackupReader.OnProgressChange += mFile_OnProgressChange;
-                CCatalogNode node = mBackupReader.ReadCatalog();
+                var rootNode = mBackupReader.ReadCatalog();
                 
                 // Populate tree view
                 tvDirs.Nodes.Clear();
-                tvDirs.Nodes.Add("root", node.Name, 0);
-                tvDirs.Nodes[0].Tag = node;
-                PopulateTreeView(tvDirs.Nodes[0], node);
+                tvDirs.Nodes.Add("root", rootNode.Name, 0);
+                tvDirs.Nodes[0].Tag = rootNode;
+                PopulateTreeView(tvDirs.Nodes[0], rootNode);
                 tsStatus.Text = "Select a single volume, folder or file to extract.";
 
                 // UI cues
@@ -143,9 +144,9 @@ namespace BackupReader
             if (mBackupReader != null) mBackupReader.Close();
         }
 
-        void mFile_OnProgressChange(int Progress)
+        void mFile_OnProgressChange(int progress)
         {
-            tsStatus.Text = "Reading backup file. %" + Progress.ToString() + " completed.";
+            tsStatus.Text = "Reading backup file. " + progress + "% completed.";
             Application.DoEvents();
         }
 

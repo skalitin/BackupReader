@@ -6,6 +6,7 @@ namespace BackupReader
     /// </summary>
     class CBackupReader
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private long mLastPos;
         private long mIncrement;
         private bool mCancel;
@@ -37,17 +38,20 @@ namespace BackupReader
         /// </summary>
         public CCatalogNode ReadCatalog()
         {
+            Logger.Info("Reading backup");
+
             // Set to true to cancel reading
             mCancel = false;
 
             // Read the media header
-            CTapeHeaderDescriptorBlock tapeHeaderDescriptorBlock = (CTapeHeaderDescriptorBlock)mStream.ReadDBLK();
+            var tapeHeaderDescriptorBlock = (CTapeHeaderDescriptorBlock)mStream.ReadDBLK();
             
             // Read soft file mark
-            CSoftFilemarkDescriptorBlock filemarkDescriptorBlock = (CSoftFilemarkDescriptorBlock)mStream.ReadDBLK();
+            var filemarkDescriptorBlock = (CSoftFilemarkDescriptorBlock)mStream.ReadDBLK();
 
             // Create the root catalog node
-            CCatalogNode node = new CCatalogNode(tapeHeaderDescriptorBlock, tapeHeaderDescriptorBlock.MediaName, ENodeType.Root);
+            var node = new CCatalogNode(tapeHeaderDescriptorBlock, tapeHeaderDescriptorBlock.MediaName, ENodeType.Root);
+
             CCatalogNode lastSetNode = null;
             CCatalogNode lastVolumeNode = null;
             CCatalogNode lastFolderNode = null;
