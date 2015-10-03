@@ -131,7 +131,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACK
-        DAAAAk1TRnQBSQFMAgEBBQEAARABAAEQAQABEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        DAAAAk1TRnQBSQFMAgEBBQEAASABAAEgAQABEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAASADAAEBAQABCAYAAQgYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -219,13 +219,13 @@
   <data name="cancelToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFkSURBVDhPtZJBbsIwEEW9a3f2rghB7A1qhJSMd0VFynhV
-        aIUwR+AIHIEj5AgcIUfgCDkCR8gN0hljotLSAos+yQLmz/z5wRGM//B2+bbc+5l3oXAvOMO1c66dTqeN
-        f/erWL6I997gHDfx5xFEXBdFUdmJa9mIkmyj1KEBFPW5xXzR0Oculo9QwbDIJmwQTLyv6CjWAVEVcx80
-        mEAJZBYGL0FGmy8mO3xFixMswzBAyUli6++QiaU0NT/SeDxu+CRpXt00fIK2OWtt68gky7KD1vcMv4AZ
-        pnnNBuGwySg7RPlvaHMYNqltc4ot+9omSVKxkU7h/Pq+A880PBzWxpg2z/O91lpJKcOh7yX/F5p6Yvs5
-        AKho067f6zf8zJTERkmcTMi0ZqNYPoeEleqZlqPTli0PRKmDtw9GgwNpP1PIJ7lVSrWUYi8fLjREgN4J
-        MujSdVACKx4Fx3NCimtXdvuV/jNCfAJv429hM9/G7wAAAABJRU5ErkJggg==
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFkSURBVDhPtZJBbsIwEEW9a3f2rlBB7A1qhJSMd0VFynhV
+        aIUwR+AIHIEj5AgcIUfgCDkCR8gN0hljotLSFhZ9kgXMn/nzgyMY/+7t8nW59zPvQuFWcIZr51w7nU4b
+        /+ZXsXwR773BOW7izyOIuC6KorIT17IRJdlGqUMDKOpzi/mioc9dLB+hgmGRTdggmHhf0VGsA6Iq5j5o
+        MIESyCwMXoKMNp9MdviCFidYhmGAkpPE1p8hE0tpan6k8Xjc8EnSvLpq+ARtc9ba1pFJlmUHrW8ZfgYz
+        TPOaDcJhk1F2iPLv0OYwbFLb5hRbPmqbJEnFRjqF8+v7CjzR8HBYG2PaPM/3WmslpQyHvpf8X2jqie3n
+        AKCiTbt+r9/wM1MSGyVxMiHTmo1i+RwSVqpnWo5OW7Y8EKUO3j4YDQ6kfU8hH+RWKdVSir28u9AQAXon
+        yKBL10EJrLgXHM8JKf66suuv9J8R4gNs+29flXO06gAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="opencatalogToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -266,6 +266,9 @@
   </metadata>
   <metadata name="sfdCatalog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>678, 17</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>141</value>
   </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

@@ -34,7 +34,6 @@ namespace BackupReader
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tvDirs = new System.Windows.Forms.TreeView();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.openToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -46,6 +45,8 @@ namespace BackupReader
             this.fbdBackup = new System.Windows.Forms.FolderBrowserDialog();
             this.ofdCatalog = new System.Windows.Forms.OpenFileDialog();
             this.sfdCatalog = new System.Windows.Forms.SaveFileDialog();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tvDirs = new System.Windows.Forms.TreeView();
             this.detailsTextBox1 = new System.Windows.Forms.TextBox();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -53,6 +54,7 @@ namespace BackupReader
             this.toolStripContainer1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ofdBackup
@@ -69,13 +71,12 @@ namespace BackupReader
             // 
             // toolStripContainer1.ContentPanel
             // 
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.detailsTextBox1);
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.tvDirs);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(698, 421);
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.tableLayoutPanel1);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(930, 499);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(748, 516);
+            this.toolStripContainer1.Size = new System.Drawing.Size(930, 544);
             this.toolStripContainer1.TabIndex = 0;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -88,9 +89,9 @@ namespace BackupReader
             this.statusStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 25);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 0);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(748, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(930, 22);
             this.statusStrip1.TabIndex = 0;
             // 
             // tsStatus
@@ -98,19 +99,6 @@ namespace BackupReader
             this.tsStatus.Name = "tsStatus";
             this.tsStatus.Size = new System.Drawing.Size(39, 17);
             this.tsStatus.Text = "Ready";
-            // 
-            // tvDirs
-            // 
-            this.tvDirs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tvDirs.ImageIndex = 0;
-            this.tvDirs.ImageList = this.imageList1;
-            this.tvDirs.Location = new System.Drawing.Point(0, 0);
-            this.tvDirs.Name = "tvDirs";
-            this.tvDirs.SelectedImageIndex = 0;
-            this.tvDirs.Size = new System.Drawing.Size(698, 421);
-            this.tvDirs.TabIndex = 1;
-            this.tvDirs.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvDirs_AfterSelect);
-            this.tvDirs.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvDirs_NodeMouseDoubleClick);
             // 
             // imageList1
             // 
@@ -135,7 +123,7 @@ namespace BackupReader
             this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(748, 23);
+            this.toolStrip1.Size = new System.Drawing.Size(930, 23);
             this.toolStrip1.Stretch = true;
             this.toolStrip1.TabIndex = 0;
             // 
@@ -205,19 +193,49 @@ namespace BackupReader
             this.sfdCatalog.DefaultExt = "cat";
             this.sfdCatalog.Filter = "Catalog Files (*.cat)|*.cat|All Files|*.*";
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel1.Controls.Add(this.detailsTextBox1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tvDirs, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(930, 499);
+            this.tableLayoutPanel1.TabIndex = 4;
+            // 
+            // tvDirs
+            // 
+            this.tvDirs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tvDirs.ImageIndex = 0;
+            this.tvDirs.ImageList = this.imageList1;
+            this.tvDirs.Location = new System.Drawing.Point(3, 3);
+            this.tvDirs.Name = "tvDirs";
+            this.tvDirs.SelectedImageIndex = 0;
+            this.tvDirs.Size = new System.Drawing.Size(552, 493);
+            this.tvDirs.TabIndex = 5;
+            this.tvDirs.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvDirs_AfterSelect);
+            this.tvDirs.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvDirs_NodeMouseDoubleClick);
+            // 
             // detailsTextBox1
             // 
-            this.detailsTextBox1.Location = new System.Drawing.Point(179, 247);
+            this.detailsTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.detailsTextBox1.Location = new System.Drawing.Point(561, 3);
             this.detailsTextBox1.Multiline = true;
             this.detailsTextBox1.Name = "detailsTextBox1";
-            this.detailsTextBox1.Size = new System.Drawing.Size(338, 109);
-            this.detailsTextBox1.TabIndex = 2;
+            this.detailsTextBox1.ReadOnly = true;
+            this.detailsTextBox1.Size = new System.Drawing.Size(366, 493);
+            this.detailsTextBox1.TabIndex = 6;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(748, 516);
+            this.ClientSize = new System.Drawing.Size(930, 544);
             this.Controls.Add(this.toolStripContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
@@ -226,7 +244,6 @@ namespace BackupReader
             this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);
             this.toolStripContainer1.BottomToolStripPanel.PerformLayout();
             this.toolStripContainer1.ContentPanel.ResumeLayout(false);
-            this.toolStripContainer1.ContentPanel.PerformLayout();
             this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
             this.toolStripContainer1.TopToolStripPanel.PerformLayout();
             this.toolStripContainer1.ResumeLayout(false);
@@ -235,6 +252,8 @@ namespace BackupReader
             this.statusStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -248,7 +267,6 @@ namespace BackupReader
         private System.Windows.Forms.ToolStripButton openToolStripButton;
         private System.Windows.Forms.ToolStripStatusLabel tsStatus;
         private System.Windows.Forms.ImageList imageList1;
-        private System.Windows.Forms.TreeView tvDirs;
         private System.Windows.Forms.ToolStripButton extractToolStripButton;
         private System.Windows.Forms.FolderBrowserDialog fbdBackup;
         private System.Windows.Forms.ToolStripButton cancelToolStripButton;
@@ -257,7 +275,9 @@ namespace BackupReader
         private System.Windows.Forms.ToolStripButton savecatalogToolStripButton;
         private System.Windows.Forms.OpenFileDialog ofdCatalog;
         private System.Windows.Forms.SaveFileDialog sfdCatalog;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TextBox detailsTextBox1;
+        private System.Windows.Forms.TreeView tvDirs;
     }
 }
 
